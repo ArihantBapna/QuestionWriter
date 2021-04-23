@@ -1,0 +1,18 @@
+<script>
+    $('#questionsTable').on('click-row.bs.table', function (e, row, f) {
+          $("#floatingSelect2").val(parseInt(row.catId)).change();
+          if (row.approval == 1) {
+            $("#appCheck").prop("checked", true);
+            $("impApp").attr("value", 1);
+          } else {
+            $("#appCheck").prop("checked", false);
+            $("#impApp").attr("value", 0);
+          }
+
+          $("#idh").val(parseInt(row.id));
+          $("#deleteM").val(parseInt(row.id));
+
+          tinymce.get("textarea1").setContent(row.quest);
+          $("#myModal").modal("show");
+    });
+</script>

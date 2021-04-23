@@ -1,0 +1,114 @@
+<div class="modal" id="myModal" tabindex="-1">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Update Questions</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <form id="updateForm" method="POST" action="/update">
+          <div class="modal-body">
+            <div class="input-field col s12">
+              <input type="hidden" id="idh" name="idHold" />
+            </div>
+            <div class="input-field col s12">
+              <textarea
+                id="textarea1"
+                name="Question"
+                class="materialize-textarea"
+              ></textarea>
+              <label for="textarea1" class=""></label>
+            </div>
+            <div class="form-floating">
+              <select
+                class="form-select"
+                name="category"
+                id="floatingSelect2"
+                aria-label="Category selector"
+                style="padding-bottom: 0.5rem !important;"
+              >
+                <optgroup label="Science">
+                  <option selected value="1">Biology</option>
+                  <option value="2">Chemistry</option>
+                  <option value="3">Physics</option>
+                  <option value="4">Math</option>
+                  <option value="5">Astronomy</option>
+                  <option value="6">Computer Science</option>
+                  <option value="7">
+                    Earth, Ocean and Atmospheric Science
+                  </option>
+                </optgroup>
+                <optgroup label="Literature">
+                  <option value="8">Long Fiction</option>
+                  <option value="9">Drama</option>
+                  <option value="10">Poetry</option>
+                  <option value="11">Short Fiction</option>
+                  <option value="12">Other</option>
+                </optgroup>
+                <optgroup label="Fine Arts">
+                  <option value="13">Painting and Sculpture</option>
+                  <option value="14">Classical Music</option>
+                  <option value="15">Other</option>
+                </optgroup>
+                <optgroup label="RMPSS">
+                  <option value="16">Religion</option>
+                  <option value="17">Mythology</option>
+                  <option value="18">Philosophy</option>
+                  <option value="19">Economy</option>
+                  <option value="20">Psychology</option>
+                  <option value="21">Other</option>
+                </optgroup>
+                <optgroup label="History">
+                  <option value="22">US History</option>
+                  <option value="23">European History</option>
+                  <option value="24">European Ancient</option>
+                  <option value="25">World History</option>
+                </optgroup>
+                <optgroup label="Other">
+                  <option value="26">Geography</option>
+                  <option value="27">Popular Culture</option>
+                  <option value="28">Current Events</option>
+                </optgroup>
+              </select>
+              <label for="floatingSelect2">Category</label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                id="appCheck"
+              />
+              <input id="impApp" type="hidden" name="App" value="0" />
+              <label class="form-check-label" for="appCheck">
+                Approval
+              </label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <input type="submit" class="btn btn-primary" />
+          </div>
+        </form>
+        <form
+          id="deleteQuestion"
+          method="POST"
+          action="/delete"
+          style="margin: 0.1em"
+        >
+          <input id="deleteM" name="deleteId" type="hidden" value="0" />
+          <input type="submit" class="btn btn-danger" value="Delete" />
+        </form>
+      </div>
+    </div>
+  </div>

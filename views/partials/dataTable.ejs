@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table id="questionsTable" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true">
+                <caption style="caption-side: top;">Our Questions</caption>
+                <thead>
+                    <tr>
+                        <th data-field="id" data-sortable="true">id</th>
+                        <th data-field="quest" data-sortable="true">Question</th>
+                        <th data-field="cat" data-sortable="true">Category</th>
+                        <th data-field="catId" data-sortable="true">CategoryID</th>
+                        <th data-field="type" data-sortable="true">Type</th>
+                        <th data-field="approval" data-sortable="true">Approval</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% data.forEach(function(d) { %>
+                        <tr>
+                            <td><%- d.id %></td>
+                            <td><%- d.question %></td>
+                            <td><%- d.catName %></td>
+                            <td><%- d.category %></td>
+                            <td><%- d.type %></td>
+                            <td><%- d.approval %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
