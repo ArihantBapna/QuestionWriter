@@ -17,7 +17,7 @@
       $("body").fadeIn(500);
     });
 </script>
-<%if (Clues.length > 1) {%>
+<%if ( typeof(Clues) != 'undefined' && Clues.length > 1) {%>
 <script>
   var firstLine = [];
 
