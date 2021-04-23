@@ -1,0 +1,19 @@
+<%if (typeof(question) != "undefined") {%>
+<script>
+    tinymce.init({
+    selector: '#questionArea', 
+    setup: function (editor) {
+      editor.on('init', function (e) {
+        editor.setContent("<%= question %>");
+      });
+    }
+    });
+</script>
+<% }else { %>
+<script>
+  tinymce.init({
+    selector: 'textarea',
+    plugins: 'autoresize'
+  });
+</script>
+<% } %>

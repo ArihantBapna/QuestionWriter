@@ -24,21 +24,16 @@ app.set('view engine', 'ejs');
 
 var db = [];
 
-// index page
-app.get('/', function(req, res) {
+// writing page page
+app.get('/writer', function(req, res) {
     pool.query("SELECT * FROM answers", (error, results) => {
         if (error) {
           throw error;
         }
         var x = results.rows;
         db = x;
-        res.render("pages/index", { root: __dirname, data: db, matchAns: [{}], Clues:[{}]});
+        res.render("pages/writer", { root: __dirname, data: db, matchAns: [{}], Clues:[{}]});
       });
-});
-
-// about page
-app.get('/about', function(req, res) {
-    res.render('pages/about');
 });
 
 app.post('/searchAnswer', function(req, res){
@@ -48,7 +43,7 @@ app.post('/searchAnswer', function(req, res){
             throw error;
         }        
         var x = results.rows;
-        res.render("pages/index",{ root: __dirname, data: db, matchAns: x, Clues:[{}]})
+        res.render("pages/writer",{ root: __dirname, data: db, matchAns: x, Clues:[{}]})
     });
 });
 
@@ -58,13 +53,26 @@ app.post('/searchClues', async function(req,res){
     var clues = [];
     for(var i=0;i<a.length;i++){
         var m = a[i];
-        console.log(m);
         var result = await selectClues(m);
         for(var r in result){
             clues.push(result[r]);
         }
     }
-    res.render("pages/index", { root: __dirname, data: db, matchAns: [{}] ,Clues: clues});
+    var firstLines = clues.filter(p => p.line == 0);
+    var midLines = clues.filter(p => p.line != -1);
+    midLines = midLines.filter(p => p.line != 0);
+
+    var lastLines = clues.filter(p => p.line == -1);
+    var allClues = [];
+    allClues.push(firstLines);
+    allClues.push(midLines);
+    allClues.push(lastLines);
+    res.render("pages/writer", { root: __dirname, data: db, matchAns: [{}] ,Clues: allClues});
+});
+
+app.post('/generateQuestion', function(req,res){
+    var question = JSON.parse(req.body.first) +" " +JSON.parse(req.body.mid) +" " +JSON.parse(req.body.last);
+    res.render("pages/writer",{ root: __dirname, data: db, matchAns: [{}] ,Clues: [{}], question: question});
 });
 
 async function selectClues(m){
@@ -75,6 +83,7 @@ async function selectClues(m){
         return err.stack;
     }
 }
+//done with all things writing
 
 app.listen(80);
 console.log('80 is the magic port');

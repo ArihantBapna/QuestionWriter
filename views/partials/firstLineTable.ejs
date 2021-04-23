@@ -1,0 +1,36 @@
+<% var firstLine = Clues[0] %>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <table id="firstLineTable" data-toggle="table" data-search="true" data-show-columns="true" data-pagination="true">
+            <caption style="caption-side: top;">First Line</caption>
+            <thead>
+              <tr>
+                <th data-field="select" data-radio="true"></th>
+                <th data-field="answer" data-sortable="true">Answer</th>
+                <th data-field="clue" data-sortable="true">Clue</th>
+                <th data-field="line" data-sortable="true">Line</th>
+                <th data-field="category" data-sortable="true">Cat</th>
+                <th data-field="subcategory" data-sortable="true">Sub</th>
+                <th data-field="answerId" data-sortable="true">AID</th>
+                <th data-field="questionId" data-sortable="true">QID</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (var i =0; i <firstLine.length; i++ ) { %>
+                <tr>
+                  <td></td>
+                  <td><%- firstLine[i].answer %></td>
+                  <td><%- firstLine[i].clue %></td>
+                  <td><%- firstLine[i].line %></td>
+                  <td><%- firstLine[i].category_id %></td>
+                  <td><%- firstLine[i].subcategory_id %></td>
+                  <td><%- firstLine[i].answer_id %></td>
+                  <td><%- firstLine[i].question_id %></td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>

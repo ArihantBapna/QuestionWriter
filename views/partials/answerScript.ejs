@@ -17,3 +17,51 @@
       $("body").fadeIn(500);
     });
 </script>
+<%if (Clues.length > 1) {%>
+<script>
+  var firstLine = [];
+
+  $('#firstLineTable').on('check.bs.table', function (e, row) {
+    firstLine = {clue: row.clue, answer: row.answer, qid: row.questionId};
+    $("#firstLine").val(JSON.stringify(firstLine.clue));
+    $("#ansLine").val(JSON.stringify(firstLine.answer));
+  });
+
+  var middleLines = [];
+  $('#midLineTable').on('check.bs.table', function (e, row) {
+    middleLines.push({clue: row.clue, answer: row.answer, qid: row.questionId});
+    var midString = "";
+    for(var m in middleLines){
+      midString += middleLines[m].clue;
+    }
+    $("#midLine").val(JSON.stringify(midString));
+  });
+
+  $('#midLineTable').on('uncheck.bs.table', function (e, row) {
+    $.each(middleLines, function(index, value) {
+      if (value.clue === row.clue) {
+        middleLines.splice(index,1);
+      }
+    });
+    var midString = "";
+    for(var m in middleLines){
+      midString += middleLines[m].clue;
+    }
+    $("#midLine").val(JSON.stringify(midString));
+  });
+
+  var lastLine = [];
+  $('#lastLineTable').on('check.bs.table', function (e, row) {
+    lastLine = {clue: row.clue, answer: row.answer, qid: row.questionId};
+    $("#lastLine").val(JSON.stringify(lastLine.clue));
+  });
+
+
+  $("#findClues").click(function() {
+    var question = JSON.parse($("#firstLine").val()) +" " +JSON.parse($("#midLine").val()) +" " +JSON.parse($("#lastLine").val());
+    question = "QUESTION: " +question;
+    question = question + " \n" +"ANSWER: " +JSON.parse($("#ansLine").val());
+    tinymce.get('questionArea').setContent(question);
+  });
+</script>
+<% } %>

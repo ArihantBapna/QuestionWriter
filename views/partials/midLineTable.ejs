@@ -1,0 +1,36 @@
+<% var midLine = Clues[1] %>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <table id="midLineTable" data-toggle="table" data-search="true" data-show-columns="true" data-pagination="true">
+            <caption style="caption-side: top;">Middle Lines</caption>
+            <thead>
+              <tr>
+                <th data-field="select" data-checkbox="true"></th>
+                <th data-field="answer" data-sortable="true">Answer</th>
+                <th data-field="clue" data-sortable="true">Clue</th>
+                <th data-field="line" data-sortable="true">Line</th>
+                <th data-field="category" data-sortable="true">Cat</th>
+                <th data-field="subcategory" data-sortable="true">Sub</th>
+                <th data-field="answerId" data-sortable="true">AID</th>
+                <th data-field="questionId" data-sortable="true">QID</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (var i =0; i <midLine.length; i++ ) { %>
+                <tr>
+                  <td></td>
+                  <td><%- midLine[i].answer %></td>
+                  <td><%- midLine[i].clue %></td>
+                  <td><%- midLine[i].line %></td>
+                  <td><%- midLine[i].category_id %></td>
+                  <td><%- midLine[i].subcategory_id %></td>
+                  <td><%- midLine[i].answer_id %></td>
+                  <td><%- midLine[i].question_id %></td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>

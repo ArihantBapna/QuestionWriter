@@ -1,36 +1,27 @@
 <%if (Clues.length > 1) {%>
-    <div class="container">
-      <div class="row justify-content-center">
-        
-      </div>
-      <br>
-      <div class="row">
-        <div class="col-12">
-          <table id="table" class="table table-bordered">
-            <thead>
-              <tr>
-                <th scope="col-auto">Select</th>
-                <th scope="col">Answer</th>
-                <th scope="col">Clue</th>
-                <th scope="col">Line</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% for (var i =0; i <Clues.length; i++ ) { %>
-              <tr>
-                <td>
-                  <div class="custom-control custom-checkbox">
-                      <input type="checkbox" id="<%-Clues[i].id %>" class="custom-control-input">
-                  </div>
-                </td>
-                <td><%- Clues[i].answer %></td>
-                <td><%- Clues[i].clue %></td>
-                <td><%- Clues[i].line %></td>
-              </tr>
-              <% } %>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+<hr />
+<%- include('../partials/firstLineTable'); %>
+<hr />
+<%- include('../partials/midLineTable'); %>
+<hr />
+<%- include('../partials/lastLineTable'); %>
+<hr />
+
+<div>
+  <input type="hidden" display="hidden" name="first" id="firstLine" value="0" />
+  <input type="hidden" display="hidden" name="mid" id="midLine" value="0" />
+  <input type="hidden" display="hidden" name="last" id="lastLine" value="0" />
+  <input type="hidden" display="hidden" name="ans" id="ansLine" value="0" />
+  <div class="row justify-content-center">
+    <button
+      id="findClues"
+      data-bs-toggle="modal"
+      data-bs-target="#addModal"
+      class="btn btn-primary"
+    >
+      Generate Question
+    </button>
+  </div>
+</div>
+
 <% } %>
