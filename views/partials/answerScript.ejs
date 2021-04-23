@@ -1,0 +1,19 @@
+<script>
+    var checkedRows = [];
+    $('#table').on('check.bs.table', function (e, row) {
+      checkedRows.push(row.id);
+      $("#key").val(JSON.stringify(checkedRows));
+    });
+
+    $('#table').on('uncheck.bs.table', function (e, row) {
+      $.each(checkedRows, function(index, value) {
+        if (value === row.id) {
+          checkedRows.splice(index,1);
+        }
+      });
+      $("#key").val(JSON.stringify(checkedRows));
+    });
+    $(document).ready(function(){
+      $("body").fadeIn(500);
+    });
+</script>

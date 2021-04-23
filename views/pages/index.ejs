@@ -3,50 +3,19 @@
   <head>
     <%- include('../partials/head'); %>
   </head>
-  <body>
+  <body style="display:none;">
     <header><%- include('../partials/header'); %></header>
 
-    <div class="container">
-      <br />
-      <form
-        class="row justify-content-center"
-        method="POST"
-        action="/searchAnswer"
-      >
-        <div class="col-8">
-          <label for="answerInput" class="visually-hidden">AnswerLine</label>
-          <input
-            type="text"
-            class="form-control"
-            id="answerInput"
-            placeholder="Enter your answer line"
-            name="answerText"
-            list="datalistOptions"
-          />
-          <datalist id="datalistOptions">
-            <% for (var i =0; i <=data.length-1; i++ ) { %>
-            <option value="<%= data[i].answer %>"></option>
-            <% } %>
-          </datalist>
-        </div>
-        <div class="col-auto">
-          <button type="submit" class="btn btn-primary mb-3">Search</button>
-        </div>
-      </form>
-    </div>
+    <%- include('../partials/answerSearch'); %>
     <br />
-    <%if (matchAns.length > 1) { %>
-        <div class="list-group">
-            <% for (var i =0; i <matchAns.length; i++ ) { %>
-                <label class="list-group-item">
-                    <input class="form-check-input me-1" type="checkbox" value="">
-                    <%- matchAns[i].answer %>
-                </label>
-            <% } %>
-        </div>
-        
-    <% } %>
+
+    <%- include('../partials/answerTable'); %>
+
+    <%- include('../partials/cluesTable'); %>
 
     <footer><%- include('../partials/footer'); %></footer>
+
+    <%- include('../partials/answerScript'); %>
+    
   </body>
 </html>

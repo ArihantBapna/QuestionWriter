@@ -1,0 +1,23 @@
+<div class="container">
+    <br />
+    <form
+      class="row justify-content-center"
+      method="POST"
+      action="/searchAnswer"
+      id="answerSearcher"
+    >
+      <div class="col-8">
+        <label for="answerInput" class="visually-hidden">AnswerLine</label>
+        <input
+          type="text"
+          class="form-control"
+          id="answerInput"
+          placeholder="Enter your answer line (Empty search to load all answer lines)"
+          name="answerText"
+        />
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary mb-3">Search</button>
+      </div>
+    </form>
+</div>
