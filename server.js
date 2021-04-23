@@ -67,7 +67,7 @@ app.get("/", function (req, res) {
           }
           drim2.push(obj);
         }
-        res.render("pages/index", { root: __dirname, data: drim, bonus: drim2, totalT: tLen, totalB: bLen })
+        res.render("pages/index", { root: __dirname, data: drim, bonus: drim2, totalT: tLen, totalB: bLen, page_name: 'index' })
       });
   });
 //End index page
@@ -80,7 +80,7 @@ app.get('/writer', function(req, res) {
         }
         var x = results.rows;
         db = x;
-        res.render("pages/writer", { root: __dirname, data: db, matchAns: [{}], Clues:[{}]});
+        res.render("pages/writer", { root: __dirname, data: db, matchAns: [{}], Clues:[{}], page_name: 'writer'});
       });
 });
 
@@ -91,7 +91,7 @@ app.post('/searchAnswer', function(req, res){
             throw error;
         }        
         var x = results.rows;
-        res.render("pages/writer",{ root: __dirname, data: db, matchAns: x, Clues:[{}]})
+        res.render("pages/writer",{ root: __dirname, data: db, matchAns: x, Clues:[{}], page_name: 'writer'})
     });
 });
 
@@ -115,12 +115,12 @@ app.post('/searchClues', async function(req,res){
     allClues.push(firstLines);
     allClues.push(midLines);
     allClues.push(lastLines);
-    res.render("pages/writer", { root: __dirname, data: db, matchAns: [{}] ,Clues: allClues});
+    res.render("pages/writer", { root: __dirname, data: db, matchAns: [{}] ,Clues: allClues, page_name: 'writer'});
 });
 
 app.post('/generateQuestion', function(req,res){
     var question = JSON.parse(req.body.first) +" " +JSON.parse(req.body.mid) +" " +JSON.parse(req.body.last);
-    res.render("pages/writer",{ root: __dirname, data: db, matchAns: [{}] ,Clues: [{}], question: question});
+    res.render("pages/writer",{ root: __dirname, data: db, matchAns: [{}] ,Clues: [{}], question: question, page_name: 'writer'});
 });
 
 async function selectClues(m){
