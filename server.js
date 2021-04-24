@@ -10,7 +10,7 @@ const pool = new Pool({
   user: "arihant0611@questionsbank",
   host: "questionsbank.postgres.database.azure.com",
   database: "qbdb",
-  password: "Seagull1234#",
+  password: process.env.qbpwd,
   port: 5432,
 });
 pool.connect();
