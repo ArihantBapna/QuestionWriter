@@ -64,70 +64,84 @@ app.post("/tryLog", function (req, res) {
     res.render('pages/login',{ root: __dirname, page_name: "login", error_message: "Why'd u send nothing." } );
   }
 });
+
+app.get('/logout', function(req,res){
+  if(req.session.loggedin) req.session.loggedin = false;
+  res.redirect('/login');
+});
 //End login page
 
 //Index page
 app.get("/", function (req, res) {
-  pool.query("SELECT * FROM questions", (error, results) => {
-    if (error) {
-      throw error;
-    }
-    var drim = [];
-    var drim2 = [];
-    var tLen = 0;
-    var bLen = 0;
-    var x = results.rows;
-    for (var i = 1; i <= 28; i++) {
-      var obj = { cat: "", val: 0 };
-      obj.cat = getString(i);
-      obj.tot = getNumbers(i);
-      obj.type = "T";
-      for (var j = 0; j < x.length; j++) {
-        if (x[j].category == i && x[j].type === "T") {
-          obj.val++;
-          tLen++;
-        }
+  if (req.session.loggedin) {
+    pool.query("SELECT * FROM questions", (error, results) => {
+      if (error) {
+        throw error;
       }
-      drim.push(obj);
-    }
-
-    for (var i = 1; i <= 28; i++) {
-      var obj = { cat: "", val: 0 };
-      obj.cat = getString(i);
-      obj.tot = getNumbers(i);
-      obj.type = "B";
-      for (var j = 0; j < x.length; j++) {
-        if (x[j].category == i && x[j].type === "B") {
-          obj.val++;
-          bLen++;
+      var drim = [];
+      var drim2 = [];
+      var tLen = 0;
+      var bLen = 0;
+      var x = results.rows;
+      for (var i = 1; i <= 28; i++) {
+        var obj = { cat: "", val: 0 };
+        obj.cat = getString(i);
+        obj.tot = getNumbers(i);
+        obj.type = "T";
+        for (var j = 0; j < x.length; j++) {
+          if (x[j].category == i && x[j].type === "T") {
+            obj.val++;
+            tLen++;
+          }
         }
+        drim.push(obj);
       }
-      drim2.push(obj);
-    }
-    res.render("pages/index", {
-      root: __dirname,
-      data: drim,
-      bonus: drim2,
-      totalT: tLen,
-      totalB: bLen,
-      page_name: "index",
+  
+      for (var i = 1; i <= 28; i++) {
+        var obj = { cat: "", val: 0 };
+        obj.cat = getString(i);
+        obj.tot = getNumbers(i);
+        obj.type = "B";
+        for (var j = 0; j < x.length; j++) {
+          if (x[j].category == i && x[j].type === "B") {
+            obj.val++;
+            bLen++;
+          }
+        }
+        drim2.push(obj);
+      }
+      res.render("pages/index", {
+        root: __dirname,
+        data: drim,
+        bonus: drim2,
+        totalT: tLen,
+        totalB: bLen,
+        page_name: "index",
+      });
     });
-  });
+  }else{
+    res.render('pages/login',{ root: __dirname, page_name: "login", error_message: "You must be logged in." } )
+  }
 });
 //End index page
 
 //Start of data page
 app.get("/data", function (req, res) {
-  pool.query("SELECT * FROM questions", (error, results) => {
-    if (error) {
-      throw error;
-    }
-    var x = results.rows;
-    x.forEach(function (i) {
-      i.catName = getString(parseInt(i.category));
+  if (req.session.loggedin){
+    pool.query("SELECT * FROM questions", (error, results) => {
+      if (error) {
+        throw error;
+      }
+      var x = results.rows;
+      x.forEach(function (i) {
+        i.catName = getString(parseInt(i.category));
+      });
+      res.render("pages/data", { root: __dirname, data: x, page_name: "data" });
     });
-    res.render("pages/data", { root: __dirname, data: x, page_name: "data" });
-  });
+  }else{
+    res.render('pages/login',{ root: __dirname, page_name: "login", error_message: "You must be logged in." } )
+  }
+  
 });
 //End of data page
 
@@ -191,20 +205,25 @@ app.post("/delete", function (req, res) {
 
 // writing page page
 app.get("/writer", function (req, res) {
-  pool.query("SELECT * FROM answers", (error, results) => {
-    if (error) {
-      throw error;
-    }
-    var x = results.rows;
-    db = x;
-    res.render("pages/writer", {
-      root: __dirname,
-      data: db,
-      matchAns: [{}],
-      Clues: [{}],
-      page_name: "writer",
+  if (req.session.loggedin) {
+    pool.query("SELECT * FROM answers", (error, results) => {
+      if (error) {
+        throw error;
+      }
+      var x = results.rows;
+      db = x;
+      res.render("pages/writer", {
+        root: __dirname,
+        data: db,
+        matchAns: [{}],
+        Clues: [{}],
+        page_name: "writer",
+      });
     });
-  });
+  }else{
+   res.render('pages/login',{ root: __dirname, page_name: "login", error_message: "You must be logged in." } )
+  }
+  
 });
 
 app.post("/searchAnswer", function (req, res) {
