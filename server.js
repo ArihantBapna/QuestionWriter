@@ -4,9 +4,6 @@
 var express = require("express");
 var app = express();
 var session = require("express-session");
-var bodyParser = require("body-parser");
-
-require("dotenv").config();
 
 //ensure session
 app.use(
