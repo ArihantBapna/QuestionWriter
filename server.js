@@ -120,8 +120,6 @@ app.post("/handler", function (req, res) {
 
 app.post("/update", function (req, res) {
   const dat = req.body;
-  console.log(dat.idHold);
-  console.log(dat.Question);
   pool.query(
     "UPDATE questions SET question = $1, approval = $2, category = $3 WHERE id = $4",
     [dat.Question, dat.App, dat.category, dat.idHold],
