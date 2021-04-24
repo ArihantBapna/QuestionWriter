@@ -3,6 +3,19 @@
 // load the things we need
 var express = require("express");
 var app = express();
+var session = require("express-session");
+var bodyParser = require("body-parser");
+
+require("dotenv").config();
+
+//ensure session
+app.use(
+  session({
+    secret: "vv0NkzAv9d",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 
 //connect to azure db
 const Pool = require("pg").Pool;
@@ -23,6 +36,35 @@ app.set("view engine", "ejs");
 // use res.render to load up an ejs view file
 
 var db = [];
+
+//Login page
+app.get("/login", function (req, res) {
+  res.render("pages/login", { root: __dirname, page_name: "login", error_message: "" });
+});
+
+app.post("/tryLog", function (req, res) {
+  var username = req.body.username;
+  var password = req.body.password;
+  if (username && password) {
+    pool.query(
+      "SELECT * FROM users WHERE username = $1 AND password = $2",
+      [username, password],
+      (error, results) => {
+        if (results.rows.length > 0) {
+          req.session.loggedin = true;
+          req.session.username = username;
+          res.redirect("/");
+        } else {
+          res.render('pages/login',{ root: __dirname, page_name: "login", error_message: "Incorrect Username or Password" } );
+        }
+        res.end();
+      }
+    );
+  } else {
+    res.render('pages/login',{ root: __dirname, page_name: "login", error_message: "Why'd u send nothing." } );
+  }
+});
+//End login page
 
 //Index page
 app.get("/", function (req, res) {
