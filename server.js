@@ -434,5 +434,4 @@ async function selectClues(m) {
 }
 //done with all things writing
 
-app.listen(80);
-console.log("80 is the magic port");
+app.listen(process.env.PORT || 3000, () => console.log("Server is running..."));
