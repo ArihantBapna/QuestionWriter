@@ -1,5 +1,5 @@
 //enable for local dev
-require("dotenv").config();
+//require("dotenv").config();
 
 // load the things we need
 var express = require("express");
@@ -162,11 +162,39 @@ app.get("/data", function (req, res) {
 });
 //End of data page
 
+//Start of logs page
+app.get("/logs", function (req, res) {
+  if (req.session.loggedin) {
+    pool.query("SELECT * FROM updates", (error, results) => {
+      if (error) {
+        throw error;
+      }
+      var x = results.rows;
+      res.render("pages/logs", { root: __dirname, data: x, page_name: "logs" });
+    });
+  } else {
+    res.render("pages/login", {
+      root: __dirname,
+      page_name: "login",
+      error_message: "You must be logged in.",
+    });
+  }
+});
+
+//End of logs page
+
 //CRUD Operations on questions table
 app.post("/handler", async function (req, res) {
   const dat = req.body;
 
-  var done = await insertNewQuestion(dat.key, dat.Question, dat.category, dat.type, 0, req.session.username);
+  var done = await insertNewQuestion(
+    dat.key,
+    dat.Question,
+    dat.category,
+    dat.type,
+    0,
+    req.session.username
+  );
 
   var last = await selectAllQuestions();
   var row = last[last.length - 1];
@@ -189,9 +217,19 @@ app.post("/handler", async function (req, res) {
   res.redirect("/");
 });
 
-async function insertNewQuestion(key,Question,category,type,approval,username){
+async function insertNewQuestion(
+  key,
+  Question,
+  category,
+  type,
+  approval,
+  username
+) {
   try {
-    const res = await pool.query("INSERT INTO questions (key, question, category, type, approval, username) VALUES ($1, $2, $3, $4, $5, $6)",[key,Question,category,type,approval,username]);
+    const res = await pool.query(
+      "INSERT INTO questions (key, question, category, type, approval, username) VALUES ($1, $2, $3, $4, $5, $6)",
+      [key, Question, category, type, approval, username]
+    );
     return res;
   } catch (err) {
     return err.stack;
@@ -208,14 +246,9 @@ app.post("/update", async function (req, res) {
   var bef = row.question;
   var qid = row.id;
   var aft = dat.Question;
-  if (row.question != dat.Question) {
-    type += " question";
-  } else {
-    type += " nothing";
-  }
 
   pool.query(
-    "INSERT INTO updates (qid, type, bef, aft) VALUES ($1, $2, $3, $4, $5)",
+    "INSERT INTO updates (qid, type, bef, aft, username) VALUES ($1, $2, $3, $4, $5)",
     [qid, type, bef, aft, req.session.username],
     (error, results) => {
       if (error) {

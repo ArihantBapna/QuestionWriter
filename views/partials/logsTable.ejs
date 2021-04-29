@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+              
+            <table id="logsTable" data-show-export="true" data-cookie="true" data-cookie-id-table="saveId" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true">
+                <caption style="caption-side: top;">Logs of all changes</caption>
+                <thead>
+                    <tr>
+                        <th data-field="id" data-sortable="true">id</th>
+                        <th data-field="questId" data-sortable="true">Question ID</th>
+                        <th data-field="type" data-sortable="true">Type</th>
+                        <th data-field="bef" data-sortable="true">Before</th>
+                        <th data-field="aft" data-sortable="true">After</th>
+                        <th data-field="username" data-sortable="true">By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% data.forEach(function(d) { %>
+                        <tr <% if(d.type === 'Updated') { %> class="table-primary" <% } else if(d.type === 'Added') { %> class="table-success" <% } else { %> class="table-danger" <% } %>>
+                            <td><%- d.id %></td>
+                            <td><%- d.qid %></td>
+                            <td><%- d.type %></td>
+                            <td class="text-justify" style="font-size: 15px;"><%- d.bef %></td>
+                            <td class="text-justify" style="font-size: 15px;"><%- d.aft %></td>
+                            <td><%- d.username %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
