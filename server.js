@@ -1,4 +1,5 @@
 //enable for local dev
+require("dotenv").config();
 
 // load the things we need
 var express = require("express");
@@ -36,7 +37,11 @@ var db = [];
 
 //Login page
 app.get("/login", function (req, res) {
-  res.render("pages/login", { root: __dirname, page_name: "login", error_message: "" });
+  res.render("pages/login", {
+    root: __dirname,
+    page_name: "login",
+    error_message: "",
+  });
 });
 
 app.post("/tryLog", function (req, res) {
@@ -52,19 +57,27 @@ app.post("/tryLog", function (req, res) {
           req.session.username = username;
           res.redirect("/");
         } else {
-          res.render('pages/login',{ root: __dirname, page_name: "login", error_message: "Incorrect Username or Password" } );
+          res.render("pages/login", {
+            root: __dirname,
+            page_name: "login",
+            error_message: "Incorrect Username or Password",
+          });
         }
         res.end();
       }
     );
   } else {
-    res.render('pages/login',{ root: __dirname, page_name: "login", error_message: "Why'd u send nothing." } );
+    res.render("pages/login", {
+      root: __dirname,
+      page_name: "login",
+      error_message: "Why'd u send nothing.",
+    });
   }
 });
 
-app.get('/logout', function(req,res){
-  if(req.session.loggedin) req.session.loggedin = false;
-  res.redirect('/login');
+app.get("/logout", function (req, res) {
+  if (req.session.loggedin) req.session.loggedin = false;
+  res.redirect("/login");
 });
 //End login page
 
@@ -93,7 +106,7 @@ app.get("/", function (req, res) {
         }
         drim.push(obj);
       }
-  
+
       for (var i = 1; i <= 28; i++) {
         var obj = { cat: "", val: 0 };
         obj.cat = getString(i);
@@ -116,15 +129,19 @@ app.get("/", function (req, res) {
         page_name: "index",
       });
     });
-  }else{
-    res.render('pages/login',{ root: __dirname, page_name: "login", error_message: "You must be logged in." } )
+  } else {
+    res.render("pages/login", {
+      root: __dirname,
+      page_name: "login",
+      error_message: "You must be logged in.",
+    });
   }
 });
 //End index page
 
 //Start of data page
 app.get("/data", function (req, res) {
-  if (req.session.loggedin){
+  if (req.session.loggedin) {
     pool.query("SELECT * FROM questions", (error, results) => {
       if (error) {
         throw error;
@@ -135,44 +152,78 @@ app.get("/data", function (req, res) {
       });
       res.render("pages/data", { root: __dirname, data: x, page_name: "data" });
     });
-  }else{
-    res.render('pages/login',{ root: __dirname, page_name: "login", error_message: "You must be logged in." } )
+  } else {
+    res.render("pages/login", {
+      root: __dirname,
+      page_name: "login",
+      error_message: "You must be logged in.",
+    });
   }
-  
 });
 //End of data page
 
 //CRUD Operations on questions table
-app.post("/handle", function (req, res) {
+app.post("/handler", async function (req, res) {
   const dat = req.body;
+
+  var done = await insertNewQuestion(dat.key, dat.Question, dat.category, dat.type, 0, req.session.username);
+
+  var last = await selectAllQuestions();
+  var row = last[last.length - 1];
+
+  var type = "Added";
+  var bef = "";
+  var qid = parseInt(row.id);
+  var aft = dat.Question;
+
   pool.query(
-    "INSERT INTO questions (key, question, category) VALUES ($1, $2, $3)",
-    [dat.key, dat.Question, dat.category],
+    "INSERT INTO updates (qid, type, bef, aft, username) VALUES ($1, $2, $3, $4, $5)",
+    [qid, type, bef, aft, req.session.username],
     (error, results) => {
       if (error) {
         throw error;
       }
     }
   );
+
   res.redirect("/");
 });
 
-app.post("/handler", function (req, res) {
+async function insertNewQuestion(key,Question,category,type,approval,username){
+  try {
+    const res = await pool.query("INSERT INTO questions (key, question, category, type, approval, username) VALUES ($1, $2, $3, $4, $5, $6)",[key,Question,category,type,approval,username]);
+    return res;
+  } catch (err) {
+    return err.stack;
+  }
+}
+
+app.post("/update", async function (req, res) {
   const dat = req.body;
+
+  var prev = await selectQuestion(dat.idHold);
+  var row = prev[0];
+
+  var type = "Updated";
+  var bef = row.question;
+  var qid = row.id;
+  var aft = dat.Question;
+  if (row.question != dat.Question) {
+    type += " question";
+  } else {
+    type += " nothing";
+  }
+
   pool.query(
-    "INSERT INTO questions (key, question, category, type, approval) VALUES ($1, $2, $3, $4, $5)",
-    [dat.key, dat.Question, dat.category, dat.type, 0],
+    "INSERT INTO updates (qid, type, bef, aft) VALUES ($1, $2, $3, $4, $5)",
+    [qid, type, bef, aft, req.session.username],
     (error, results) => {
       if (error) {
         throw error;
       }
     }
   );
-  res.redirect("/");
-});
 
-app.post("/update", function (req, res) {
-  const dat = req.body;
   pool.query(
     "UPDATE questions SET question = $1, approval = $2, category = $3 WHERE id = $4",
     [dat.Question, dat.App, dat.category, dat.idHold],
@@ -182,11 +233,31 @@ app.post("/update", function (req, res) {
       }
     }
   );
+
   res.redirect("/data");
 });
 
-app.post("/delete", function (req, res) {
+app.post("/delete", async function (req, res) {
   const dat = req.body;
+
+  var prev = await selectQuestion(dat.deleteId);
+  var row = prev[0];
+
+  var type = "Deleted";
+  var bef = row.question;
+  var qid = row.id;
+  var aft = "";
+
+  pool.query(
+    "INSERT INTO updates (qid, type, bef, aft, username) VALUES ($1, $2, $3, $4, $5)",
+    [qid, type, bef, aft, req.session.username],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+    }
+  );
+
   pool.query(
     "DELETE FROM questions WHERE id = $1",
     [dat.deleteId],
@@ -217,10 +288,13 @@ app.get("/writer", function (req, res) {
         page_name: "writer",
       });
     });
-  }else{
-   res.render('pages/login',{ root: __dirname, page_name: "login", error_message: "You must be logged in." } )
+  } else {
+    res.render("pages/login", {
+      root: __dirname,
+      page_name: "login",
+      error_message: "You must be logged in.",
+    });
   }
-  
 });
 
 app.post("/searchAnswer", function (req, res) {
@@ -479,6 +553,24 @@ function getString(num) {
   }
 }
 //end obscure functions
+
+async function selectAllQuestions() {
+  try {
+    const res = await pool.query("SELECT * FROM questions");
+    return res.rows;
+  } catch (err) {
+    return err.stack;
+  }
+}
+
+async function selectQuestion(m) {
+  try {
+    const res = await pool.query("SELECT * FROM questions where id = $1", [m]);
+    return res.rows;
+  } catch (err) {
+    return err.stack;
+  }
+}
 
 async function selectClues(m) {
   try {
