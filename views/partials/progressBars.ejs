@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="col-sm">
-          <p class="h5">Tossups <%- totalT %> / 280</p>
+          <p class="h5">Tossups <%- totalT %> / 160</p>
           <hr/>
           <% data.forEach(function(d){ %>
           <p class="h6"><%= d.cat %>:  <%= d.val %> / <%= d.tot %></p>
@@ -14,7 +14,7 @@
           <% }); %>
         </div>
         <div class="col-sm">
-          <p class="h5">Bonuses <%- totalB %> / 280</p>
+          <p class="h5">Bonuses <%- totalB %> / 160</p>
           <hr/>
           <% bonus.forEach(function(d){ %>
           <p class="h6"><%= d.cat %>:  <%= d.val %> / <%= d.tot %></p>

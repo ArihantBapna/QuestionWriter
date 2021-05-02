@@ -149,7 +149,7 @@ app.get("/data", function (req, res) {
       var x = results.rows;
       x.forEach(function (i) {
         i.catName = getString(parseInt(i.category));
-      });
+      }); 
       res.render("pages/data", { root: __dirname, data: x, page_name: "data" });
     });
   } else {
@@ -402,92 +402,93 @@ function getNumbers(num) {
   switch (num) {
     //Science
     case 1:
-      return 14;
+      return 8;
       break;
     case 2:
-      return 14;
+      return 8;
       break;
     case 3:
-      return 14;
+      return 8;
       break;
     case 4:
-      return 7;
+      return 4;
       break;
     case 5:
       return 2;
       break;
     case 6:
-      return 3;
+      return 4;
       break;
     case 7:
       return 2;
       break;
     //Literature
     case 8:
-      return 18;
-      break;
-    case 9:
       return 10;
       break;
+    case 9:
+      return 6;
+      break;
     case 10:
-      return 14;
+      return 8;
       break;
     case 11:
-      return 7;
+      return 4;
       break;
     case 12:
-      return 7;
+      return 4;
       break;
     case 13:
       //Fine arts
-      return 14;
+      return 8;
       break;
     case 14:
-      return 14;
+      return 8;
       break;
     case 15:
-      return 14;
+      return 8;
       break;
     //RMPSS
     case 16:
-      return 14;
+      return 6;
       break;
     case 17:
-      return 14;
+      return 6;
       break;
     case 18:
-      return 7;
+      return 3;
       break;
     case 19:
       return 4;
       break;
     case 20:
-      return 3;
+      return 2;
       break;
     case 21:
-      return 3;
+      return 1;
       break;
+    //History
     case 22:
-      return 14;
+      return 8;
       break;
     case 23:
-      return 14;
+      return 8;
       break;
     case 24:
-      return 7;
+      return 4;
       break;
     case 25:
-      return 21;
+      return 12;
       break;
     //Other
     case 26:
-      return 9;
+      return 6;
       break;
     case 27:
-      return 10;
+      return 5;
       break;
     case 28:
-      return 9;
+      return 5;
       break;
   }
 }
