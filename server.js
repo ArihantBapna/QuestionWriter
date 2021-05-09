@@ -152,7 +152,7 @@ app.get("/data", function (req, res) {
         i.catName = getString(parseInt(i.category));
         var q = htmlToText(i.question);
         var lines = q.match(/[^\.!\?]+[\.!\?]+["']?|\s*$/g);
-        i.lines = lines.length;
+        i.lines = lines.length - 1;
       }); 
       res.render("pages/data", { root: __dirname, data: x, page_name: "data" });
     });
