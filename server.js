@@ -6,7 +6,6 @@ var express = require("express");
 var app = express();
 var session = require("express-session");
 const { htmlToText } = require('html-to-text');
-const re = /[.!?]/;
 
 //ensure session
 app.use(
@@ -152,7 +151,7 @@ app.get("/data", function (req, res) {
       x.forEach(function (i) {
         i.catName = getString(parseInt(i.category));
         var q = htmlToText(i.question);
-        var lines = q.split(re);
+        var lines = q.split(/[.!?]+\s/).filter(Boolean).length;
         i.lines = lines;
       }); 
       res.render("pages/data", { root: __dirname, data: x, page_name: "data" });
