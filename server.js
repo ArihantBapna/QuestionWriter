@@ -151,8 +151,8 @@ app.get("/data", function (req, res) {
       x.forEach(function (i) {
         i.catName = getString(parseInt(i.category));
         var q = htmlToText(i.question);
-        var lines = q.split(/[^\.!\?]+[\.!\?]+["']?|\s*$/g).filter(Boolean).length;
-        i.lines = lines;
+        var lines = q.match(/[^\.!\?]+[\.!\?]+["']?|\s*$/g);
+        i.lines = lines.length;
       }); 
       res.render("pages/data", { root: __dirname, data: x, page_name: "data" });
     });
