@@ -151,7 +151,7 @@ app.get("/data", function (req, res) {
       x.forEach(function (i) {
         i.catName = getString(parseInt(i.category));
         var q = htmlToText(i.question);
-        var lines = q.split(/[.!?]+\s/).filter(Boolean).length;
+        var lines = q.split(/[^\.!\?]+[\.!\?]+["']?|\s*$/g).filter(Boolean).length;
         i.lines = lines;
       }); 
       res.render("pages/data", { root: __dirname, data: x, page_name: "data" });
