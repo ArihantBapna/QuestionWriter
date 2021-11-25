@@ -1,5 +1,5 @@
 //enable for local dev
-//require("dotenv").config();
+require("dotenv").config();
 
 // load the things we need
 var express = require("express");
@@ -19,8 +19,8 @@ app.use(
 //connect to azure db
 const Pool = require("pg").Pool;
 const pool = new Pool({
-  user: "arihant0611@questionsbank",
-  host: "questionsbank.postgres.database.azure.com",
+  user: "arihant0611@qbserver",
+  host: "qbserver.postgres.database.azure.com",
   database: "qbdb",
   password: process.env.qbpwd,
   port: 5432,
@@ -186,6 +186,20 @@ app.get("/logs", function (req, res) {
 });
 
 //End of logs page
+
+//Start of study page
+app.get("/study", function(req,res){
+  if(req.session.loggedin){
+    res.render("pages/study", {root: __dirname, page_name: "carding_home"});
+  }else {
+    res.render("pages/login", {
+      root: __dirname,
+      page_name: "login",
+      error_message: "You must be logged in.",
+    });
+  }
+});
+//End of study page
 
 //CRUD Operations on questions table
 app.post("/handler", async function (req, res) {
